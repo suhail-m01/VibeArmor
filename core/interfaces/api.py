@@ -220,6 +220,28 @@ def _read_workspace_files(ws: Path, max_files: int = 300) -> Dict[str, str]:
     return files
 
 
+def _safe_rmtree(target: Path | str) -> None:
+    t = Path(target)
+    if not t.exists():
+        return
+    import stat
+    def _onerror(func, p, _):
+        try:
+            os.chmod(p, stat.S_IWRITE)
+            func(p)
+        except Exception:
+            pass
+    try:
+        shutil.rmtree(t, onerror=_onerror)
+    except Exception:
+        pass
+    if t.exists() and os.name == "nt":
+        try:
+            subprocess.run(["cmd", "/c", "rmdir", "/s", "/q", str(t)], check=False, capture_output=True)
+        except Exception:
+            pass
+
+
 def _ensure_default_projects() -> None:
     WORKSPACES_STORE.mkdir(parents=True, exist_ok=True)
     _load_pairings_from_disk()
@@ -342,7 +364,7 @@ def api_import_github_repo(req: GitHubImportRequest) -> Dict[str, Any]:
     clone_dest = proj_root / "raw_clone_tmp"
     ws_dest = proj_root / "workspace"
     snap_dest = proj_root / "initial_snapshot"
-    shutil.rmtree(clone_dest, ignore_errors=True)
+    _safe_rmtree(clone_dest)
     proj_root.mkdir(parents=True, exist_ok=True)
 
     cmd = ["git", "clone", "--depth", "1", "--single-branch"]
@@ -355,35 +377,35 @@ def api_import_github_repo(req: GitHubImportRequest) -> Dict[str, Any]:
     try:
         proc = subprocess.run(cmd, capture_output=True, text=True, timeout=35, env=env, check=False)
     except subprocess.TimeoutExpired:
-        shutil.rmtree(clone_dest, ignore_errors=True)
+        _safe_rmtree(clone_dest)
         if not existing_pid:
-            shutil.rmtree(proj_root, ignore_errors=True)
+            _safe_rmtree(proj_root)
         raise HTTPException(status_code=408, detail="Git clone timed out after 35s. Try a smaller repo or subpath.")
 
     if proc.returncode != 0 or not clone_dest.exists():
         err_msg = (proc.stderr or proc.stdout or "Repository not found or private.").strip().splitlines()[-1]
-        shutil.rmtree(clone_dest, ignore_errors=True)
+        _safe_rmtree(clone_dest)
         if not existing_pid:
-            shutil.rmtree(proj_root, ignore_errors=True)
+            _safe_rmtree(proj_root)
         raise HTTPException(status_code=400, detail=f"Git clone failed: {err_msg}")
 
     # Remove .git metadata & optionally narrow to subpath
-    shutil.rmtree(clone_dest / ".git", ignore_errors=True)
+    _safe_rmtree(clone_dest / ".git")
     src_dir = clone_dest
     if subpath_clean:
         cand = (clone_dest / subpath_clean).resolve()
         if not str(cand).startswith(str(clone_dest.resolve())) or not cand.is_dir():
-            shutil.rmtree(clone_dest, ignore_errors=True)
+            _safe_rmtree(clone_dest)
             if not existing_pid:
-                shutil.rmtree(proj_root, ignore_errors=True)
+                _safe_rmtree(proj_root)
             raise HTTPException(status_code=400, detail=f"Subpath '{req.subpath}' not found inside repository.")
         src_dir = cand
 
-    shutil.rmtree(ws_dest, ignore_errors=True)
-    shutil.rmtree(snap_dest, ignore_errors=True)
+    _safe_rmtree(ws_dest)
+    _safe_rmtree(snap_dest)
     shutil.copytree(src_dir, ws_dest, ignore=shutil.ignore_patterns("node_modules", ".git", ".next", "dist", "build"))
     shutil.copytree(ws_dest, snap_dest)
-    shutil.rmtree(clone_dest, ignore_errors=True)
+    _safe_rmtree(clone_dest)
     _STAGED_BUNDLES.pop(pid, None)
 
     meta = {

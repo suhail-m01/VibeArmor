@@ -25,6 +25,7 @@ IGNORED_DIRS = {
     ".venv",
     "venv",
     ".vibearmor",
+    "workspaces_store",
 }
 
 
