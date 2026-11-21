@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Shield,
+  Home,
   LayoutGrid,
   Network,
   ShieldAlert,
@@ -16,6 +17,8 @@ import {
   ChevronRight,
   FolderCode,
   Sparkles,
+  LogOut,
+  UserPlus,
 } from "lucide-react";
 import {
   BreachSimulation,
@@ -36,9 +39,18 @@ import { LiveExploitLabView } from "./components/LiveExploitLabView";
 import { SandboxAndSupabaseView } from "./components/SandboxAndSupabaseView";
 import { ResearchBenchmarkView } from "./components/ResearchBenchmarkView";
 import { EvidenceCenterView } from "./components/EvidenceCenterView";
+import { HomeDashboardView } from "./components/HomeDashboardView";
+import {
+  AuthGatewayView,
+  AuthUserProfile,
+  clearActiveUserSession,
+  loadActiveUserSession,
+  persistActiveUserSession,
+} from "./components/AuthGatewayView";
 import { readSafeJson } from "./utils/safeJson";
 
 type StudioView =
+  | "dashboard"
   | "hub"
   | "step1_graph"
   | "step2_analysis"
@@ -52,6 +64,7 @@ type StudioView =
   | "research";
 
 const VALID_VIEWS = new Set<StudioView>([
+  "dashboard",
   "hub",
   "step1_graph",
   "step2_analysis",
@@ -75,7 +88,27 @@ const WORKFLOW_STEPS: Array<{ id: StudioView; num: string; label: string; sub: s
 ];
 
 export default function App() {
-  const [view, setView] = useState<StudioView>("hub");
+  const [currentUser, setCurrentUser] = useState<AuthUserProfile | null>(() => {
+    const existing = loadActiveUserSession();
+    if (existing) return existing;
+    // Auto-authenticate when opened via VS Code / CLI deep-link (?project=...&step=...)
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("project") || params.get("step")) {
+      const autoProfile: AuthUserProfile = {
+        name: "Suhail M",
+        email: "suhail@vibearmor.security",
+        organization: "NeXGen Coders · Presidency University",
+        role: "Security Architect",
+        createdAt: new Date().toISOString(),
+      };
+      persistActiveUserSession(autoProfile, true);
+      return autoProfile;
+    }
+    return null;
+  });
+  const [authInitialMode, setAuthInitialMode] = useState<"login" | "signup">("login");
+
+  const [view, setView] = useState<StudioView>("dashboard");
   const [slmLabel, setSlmLabel] = useState<string>("Qwen2.5-Coder GGUF · Local");
 
   const [projects, setProjects] = useState<ProjectSummary[]>([]);
@@ -353,14 +386,46 @@ export default function App() {
     [activeProjectId, stagedByProject, generateSurgicalProposals]
   );
 
+  function handleSignOut(targetMode: "login" | "signup" = "login") {
+    clearActiveUserSession();
+    setAuthInitialMode(targetMode);
+    setCurrentUser(null);
+  }
+
+  // Render Luxury Light Auth Gateway (Login & Create Account Pages) when not signed in
+  if (!currentUser) {
+    return (
+      <AuthGatewayView
+        initialMode={authInitialMode}
+        onAuthenticated={(profile) => {
+          setCurrentUser(profile);
+          setView("dashboard");
+        }}
+      />
+    );
+  }
+
+  const userInitials = currentUser.name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((s) => s[0]?.toUpperCase() || "")
+    .join("") || "VA";
+
   const navGroups: Array<{
     section: string;
     items: Array<{ id: StudioView; label: string; sub: string; icon: React.ComponentType<{ className?: string }> }>;
   }> = [
     {
+      section: "COMMAND CENTER",
+      items: [
+        { id: "dashboard", label: "Home Dashboard", sub: "Posture & Quick Launch", icon: Home },
+        { id: "hub", label: "Upload GitHub / .ZIP", sub: "Import & Workspaces", icon: LayoutGrid },
+      ],
+    },
+    {
       section: "GUIDED REPO WORKFLOW",
       items: [
-        { id: "hub", label: "Upload GitHub / .ZIP", sub: "Import & Workspaces", icon: LayoutGrid },
         { id: "step1_graph", label: "1. Code Structure Graph", sub: "Complete Repo Map", icon: Network },
         { id: "step2_analysis", label: "2. Vulnerability Audit", sub: "5-Point Threat Scan", icon: ShieldAlert },
         { id: "step3_diff", label: "3. Vulnerable vs Correct", sub: "Surgical Diff & Consent", icon: FileDiff },
@@ -389,21 +454,24 @@ export default function App() {
   const isWorkflowStep = WORKFLOW_STEPS.some((s) => s.id === view);
 
   return (
-    <div className="min-h-screen bg-[#F7F9FC] text-[#0F172A] flex flex-col lg:flex-row">
-      {/* Left Precision SaaS Sidebar Rail */}
-      <aside className="w-full lg:w-64 lg:shrink-0 border-b lg:border-b-0 lg:border-r border-slate-200 bg-white flex flex-col justify-between lg:sticky lg:top-0 lg:h-screen overflow-y-auto">
+    <div className="min-h-screen text-[#0F172A] flex flex-col lg:flex-row">
+      {/* Left Luxury Porcelain Sidebar Rail */}
+      <aside className="w-full lg:w-64 lg:shrink-0 border-b lg:border-b-0 lg:border-r border-slate-200/85 bg-white/90 backdrop-blur-xl flex flex-col justify-between lg:sticky lg:top-0 lg:h-screen overflow-y-auto">
         <div>
           {/* Brand Header */}
-          <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+          <div
+            onClick={() => setView("dashboard")}
+            className="px-5 py-4 border-b border-slate-100 flex items-center justify-between cursor-pointer group"
+          >
             <div className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-sm shadow-indigo-600/20">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 text-white shadow-sm shadow-indigo-600/25 group-hover:scale-105 transition">
                 <Shield className="h-5 w-5 stroke-[2.2]" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
                   <span className="text-base font-extrabold tracking-tight text-slate-900">VibeArmor</span>
-                  <span className="rounded bg-indigo-50 px-1.5 py-0.5 font-mono text-[10px] font-bold text-indigo-700">
-                    v3.0
+                  <span className="rounded-md bg-indigo-50 border border-indigo-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-indigo-700">
+                    v3.6
                   </span>
                 </div>
                 <div className="text-[11px] font-medium text-slate-500">Pre-Push &amp; Deploy Guard</div>
@@ -412,7 +480,7 @@ export default function App() {
           </div>
 
           {/* Active Workspace Selector */}
-          <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/60">
+          <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/50">
             <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
               <span>Active Workspace</span>
               <button
@@ -433,7 +501,7 @@ export default function App() {
                   generateSurgicalProposals(nextId);
                 }
               }}
-              className="w-full rounded-xl border border-slate-200 bg-white px-2.5 py-2 text-xs font-bold text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none"
+              className="w-full rounded-xl border border-slate-200 bg-white px-2.5 py-2 text-xs font-bold text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none transition"
             >
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -465,23 +533,27 @@ export default function App() {
                             setView(item.id);
                           }
                         }}
-                        className={`group flex items-center justify-between rounded-xl px-2.5 py-2 text-left transition ${
+                        className={`group flex items-center justify-between rounded-xl px-2.5 py-2 text-left transition-all ${
                           active
-                            ? "bg-indigo-50/90 text-indigo-950 ring-1 ring-indigo-200"
-                            : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                            ? "bg-gradient-to-r from-indigo-50 to-violet-50/70 text-indigo-950 ring-1 ring-indigo-200/90 shadow-sm"
+                            : "text-slate-600 hover:bg-slate-50/90 hover:text-slate-900 hover:translate-x-0.5"
                         }`}
                       >
                         <div className="flex items-center gap-2.5 min-w-0">
                           <Icon
-                            className={`h-4 w-4 shrink-0 ${
-                              active ? "text-indigo-600" : "text-slate-400 group-hover:text-slate-600"
+                            className={`h-4 w-4 shrink-0 transition ${
+                              active ? "text-indigo-600 scale-105" : "text-slate-400 group-hover:text-indigo-500"
                             }`}
                           />
                           <div className="min-w-0">
-                            <div className={`text-xs truncate ${active ? "font-bold" : "font-semibold"}`}>
+                            <div className={`text-xs truncate ${active ? "font-extrabold" : "font-semibold"}`}>
                               {item.label}
                             </div>
-                            <div className="hidden lg:block text-[10px] text-slate-400 truncate">{item.sub}</div>
+                            {active && (
+                              <div className="hidden lg:block text-[10px] text-indigo-500/85 font-medium truncate animate-lux-fade-up">
+                                {item.sub}
+                              </div>
+                            )}
                           </div>
                         </div>
                         {active && <ChevronRight className="hidden lg:block h-3.5 w-3.5 text-indigo-500 shrink-0" />}
@@ -494,32 +566,44 @@ export default function App() {
           </div>
         </div>
 
-        {/* Bottom Telemetry Footer */}
-        <div className="hidden lg:block p-4 border-t border-slate-100 space-y-2 bg-slate-50/50">
-          <div className="rounded-xl border border-slate-200 bg-white p-2.5 space-y-1">
-            <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-800">
+        {/* Bottom Telemetry & Profile Footer */}
+        <div className="hidden lg:block p-3.5 border-t border-slate-100 space-y-2.5 bg-slate-50/40">
+          <div className="rounded-xl border border-slate-200/80 bg-white p-2.5 space-y-1 shadow-sm">
+            <div className="flex items-center gap-1.5 text-[10.5px] font-bold text-slate-700">
               <Cpu className="h-3.5 w-3.5 text-indigo-600" />
-              {slmLabel}
+              <span className="truncate">{slmLabel}</span>
             </div>
             <div className="flex items-center gap-1.5 text-[10.5px] font-medium text-emerald-700">
               <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
               Strict Surgical Guard Active
             </div>
           </div>
+
           <div className="px-1 text-[10px] text-slate-400 leading-snug">
             <strong className="text-slate-600">Team NeXGen Coder&apos;s</strong> · Presidency Univ.
           </div>
         </div>
       </aside>
 
-      {/* Main Content Workspace */}
-      <div className="flex-1 min-w-0 flex flex-col">
-        {/* Top Context & Readiness Strip */}
-        <header className="sticky top-0 z-20 border-b border-slate-200/90 bg-white/95 backdrop-blur-md px-5 py-3 flex flex-wrap items-center justify-between gap-3">
+      {/* Main Content Workspace with Ambient Drifting Aurora */}
+      <div className="relative flex-1 min-w-0 flex flex-col overflow-x-clip">
+        <div className="pointer-events-none fixed top-12 right-10 h-80 w-80 rounded-full bg-indigo-200/25 blur-3xl animate-lux-aurora -z-10" />
+        <div
+          className="pointer-events-none fixed bottom-8 left-72 h-72 w-72 rounded-full bg-sky-200/20 blur-3xl animate-lux-aurora -z-10"
+          style={{ animationDelay: "-7s" }}
+        />
+        {/* Top Frosted-Glass Context, Readiness & Account Strip */}
+        <header className="sticky top-0 z-20 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl px-5 py-3 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2 text-xs text-slate-500">
-            <span className="font-semibold text-slate-800">Active Workspace</span>
+            <button
+              type="button"
+              onClick={() => setView("dashboard")}
+              className="font-bold text-slate-700 hover:text-indigo-600 transition"
+            >
+              Dashboard
+            </button>
             <span>/</span>
-            <span className="rounded-md bg-slate-900 px-2.5 py-0.5 font-mono text-xs font-bold text-white truncate max-w-sm">
+            <span className="rounded-lg bg-slate-900 px-2.5 py-0.5 font-mono text-xs font-bold text-white truncate max-w-sm shadow-sm">
               {projectDetail?.project.name ?? "Loading..."}
             </span>
           </div>
@@ -528,30 +612,63 @@ export default function App() {
             <button
               type="button"
               onClick={() => setView("extension")}
-              className="inline-flex items-center gap-1.5 rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 font-semibold text-indigo-700 hover:bg-indigo-100 transition"
+              className="inline-flex items-center gap-1.5 rounded-full border border-indigo-200 bg-indigo-50/80 px-3 py-1 font-semibold text-indigo-700 hover:bg-indigo-100 transition"
             >
-              <PlugZap className="h-3.5 w-3.5" /> Extensions (.vsix + Chrome + 2-Way Sync)
+              <PlugZap className="h-3.5 w-3.5" /> Extensions (.vsix + Chrome)
             </button>
 
             {projectDetail && (
               <span
-                className={`rounded-full px-3 py-1 font-bold ${
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-bold ${
                   openActionable > 0
                     ? "bg-rose-50 text-rose-700 border border-rose-200"
                     : "bg-emerald-50 text-emerald-700 border border-emerald-200"
                 }`}
               >
+                <span
+                  className={`h-1.5 w-1.5 rounded-full ${
+                    openActionable > 0 ? "bg-rose-500 animate-pulse" : "bg-emerald-500"
+                  }`}
+                />
                 {openActionable > 0
-                  ? `Push Blocked (${openActionable} Open Threats)`
-                  : `Ready to Push & Deploy (${projectDetail.project.security_score}/100)`}
+                  ? `Push Blocked (${openActionable} Threats)`
+                  : `Ready to Push (${projectDetail.project.security_score}/100)`}
               </span>
             )}
+
+            {/* Authenticated User Profile Pill + Sign Out / Create Account */}
+            <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-indigo-600 to-violet-600 text-[10.5px] font-extrabold text-white shadow-sm">
+                {userInitials}
+              </div>
+              <div className="hidden sm:block leading-tight">
+                <div className="text-[11px] font-extrabold text-slate-900">{currentUser.name}</div>
+                <div className="text-[9.5px] font-medium text-slate-400">{currentUser.role}</div>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleSignOut("signup")}
+                title="Create another account"
+                className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white p-1.5 text-slate-500 hover:border-indigo-300 hover:text-indigo-600 transition"
+              >
+                <UserPlus className="h-3.5 w-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSignOut("login")}
+                title="Sign out to Login page"
+                className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2 py-1 text-[11px] font-bold text-slate-600 hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700 transition"
+              >
+                <LogOut className="h-3 w-3" />
+                <span className="hidden md:inline">Sign Out</span>
+              </button>
+            </div>
           </div>
         </header>
 
         {/* Interactive 4-Step Pipeline Stepper Bar (shown across Steps 1–4!) */}
         {isWorkflowStep && (
-          <div className="border-b border-slate-200 bg-white px-5 py-3">
+          <div className="border-b border-slate-200/80 bg-white/90 backdrop-blur-md px-5 py-3">
             <div className="max-w-[1440px] mx-auto grid grid-cols-2 sm:grid-cols-4 gap-2">
               {WORKFLOW_STEPS.map((st, idx) => {
                 const active = view === st.id;
@@ -568,7 +685,7 @@ export default function App() {
                         setView(st.id);
                       }
                     }}
-                    className={`flex items-center gap-2.5 rounded-xl border px-3 py-2 text-left transition ${
+                    className={`flex items-center gap-2.5 rounded-xl border px-3 py-2 text-left transition-all ${
                       active
                         ? "border-indigo-600 bg-indigo-50/70 text-indigo-950 shadow-sm"
                         : completed
@@ -598,8 +715,33 @@ export default function App() {
           </div>
         )}
 
-        {/* Active View Body */}
-        <main className="flex-1 p-5 sm:p-7 max-w-[1440px] w-full mx-auto">
+        {/* Active View Body with Smooth Luxury Entrance Animation */}
+        <main key={view} className="flex-1 p-5 sm:p-7 max-w-[1440px] w-full mx-auto animate-lux-fade-up">
+          {view === "dashboard" && (
+            <HomeDashboardView
+              user={currentUser}
+              projects={projects}
+              activeProjectId={activeProjectId}
+              detail={projectDetail}
+              evalData={evalData}
+              slmLabel={slmLabel}
+              onNavigate={(target) => {
+                if (target === "step3_diff") {
+                  openStep3AndPropose();
+                } else {
+                  setView(target);
+                }
+              }}
+              onSelectWorkspace={async (pid, nextView) => {
+                setStreamEvents([]);
+                await loadProjectDetail(pid);
+                if (nextView) {
+                  setView(nextView);
+                }
+              }}
+            />
+          )}
+
           {view === "hub" && (
             <ImportHubView
               projects={projects}
@@ -612,7 +754,6 @@ export default function App() {
                 else setView("step1_graph");
               }}
               onImported={(detail) => {
-                // Cancel any older in-flight load & lock active workspace to the newly imported project!
                 loadSeqRef.current += 1;
                 persistActiveId(detail.project.id);
                 setProjectDetail(detail);
@@ -620,7 +761,6 @@ export default function App() {
                 setSelectedFile(firstKey);
                 setStreamEvents([]);
                 refreshProjectsList();
-                // Immediately open Step 1: Complete Code Structure Graph of THIS imported repository!
                 setView("step1_graph");
               }}
             />
