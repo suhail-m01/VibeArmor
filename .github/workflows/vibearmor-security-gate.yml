@@ -21,6 +21,7 @@ jobs:
 
       - name: Install VibeArmor Dependencies
         run: |
+          sudo mkdir -p /home/user/exports 2>/dev/null && sudo chown -R $USER:$USER /home/user 2>/dev/null || true
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install -e .

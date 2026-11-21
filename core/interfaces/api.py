@@ -1451,11 +1451,29 @@ class StageExportRequest(BaseModel):
     base_branch: Optional[str] = None
 
 
+def _get_export_dir() -> Path:
+    # Prefer /home/user/exports if writable (container / demo env), else Path.home() / exports or PROJECT_ROOT / exports
+    cand = Path("/home/user/exports")
+    try:
+        cand.mkdir(parents=True, exist_ok=True)
+        return cand
+    except Exception:
+        pass
+    fallback = Path.home() / "exports"
+    try:
+        fallback.mkdir(parents=True, exist_ok=True)
+        return fallback
+    except Exception:
+        pass
+    proj_exp = PROJECT_ROOT / "exports"
+    proj_exp.mkdir(parents=True, exist_ok=True)
+    return proj_exp
+
+
 @app.post("/api/exports/stage")
 def api_stage_export_to_workspace(req: StageExportRequest) -> Dict[str, Any]:
-    """Save any extension/project deliverable into `/home/user/exports/` AND return inline preview/install metadata."""
-    export_dir = Path("/home/user/exports")
-    export_dir.mkdir(parents=True, exist_ok=True)
+    """Save any extension/project deliverable into export directory AND return inline preview/install metadata."""
+    export_dir = _get_export_dir()
 
     kind = req.artifact_kind
     raw_bytes: bytes = b""

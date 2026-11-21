@@ -25,6 +25,8 @@ _OLLAMA_AVAILABLE: Optional[bool] = None
 
 GGUF_SEARCH_PATHS = [
     Path(os.environ.get("VIBEARMOR_GGUF_PATH", "/nonexistent")),
+    Path.home() / ".cache/vibearmor/models/qwen2.5-coder-1.5b-instruct-q4_k_m.gguf",
+    Path.home() / ".cache/vibearmor/models/qwen2.5-coder-0.5b-instruct-q4_k_m.gguf",
     Path("/home/user/.cache/vibearmor/models/qwen2.5-coder-1.5b-instruct-q4_k_m.gguf"),
     Path("/home/user/.cache/vibearmor/models/qwen2.5-coder-0.5b-instruct-q4_k_m.gguf"),
 ]

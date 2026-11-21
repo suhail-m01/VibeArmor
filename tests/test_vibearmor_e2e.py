@@ -812,12 +812,18 @@ class TestVibeArmorEndToEnd(unittest.TestCase):
         """Verify all 7 downloadable artifacts stage cleanly to /home/user/exports/ and return valid payloads."""
         client = TestClient(app)
 
+        export_base = (
+            Path("/home/user")
+            if (Path("/home/user/exports")).exists()
+            else (Path.home() if (Path.home() / "exports").exists() else PROJECT_ROOT)
+        )
+
         for ext_kind in ("vsix", "browser_zip", "bridge_py"):
             r = client.post("/api/exports/stage", json={"artifact_kind": ext_kind})
             self.assertEqual(r.status_code, 200, r.text)
             d = r.json()
             self.assertGreater(d["size_bytes"], 500)
-            staged_file = Path("/home/user") / d["saved_workspace_path"]
+            staged_file = export_base / d["saved_workspace_path"]
             self.assertTrue(staged_file.exists(), f"Missing {staged_file}")
             # Verify raw GET download endpoint also returns 200 with exact bytes
             r_dl = client.get(d["download_path"])
@@ -838,7 +844,7 @@ class TestVibeArmorEndToEnd(unittest.TestCase):
             self.assertEqual(r_p.status_code, 200, r_p.text)
             dp = r_p.json()
             self.assertGreater(dp["size_bytes"], 100)
-            self.assertTrue((Path("/home/user") / dp["saved_workspace_path"]).exists())
+            self.assertTrue((export_base / dp["saved_workspace_path"]).exists())
         client.post("/api/projects/vibebazaar-india/reset")
 
     def test_23_workspace_live_exploit_and_supabase_sql_audit_endpoints(self) -> None:
