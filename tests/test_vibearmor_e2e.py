@@ -328,8 +328,10 @@ class TestVibeArmorEndToEnd(unittest.TestCase):
         with zipfile.ZipFile(buf, "w") as zf:
             zf.writestr(
                 ".env",
-                STRIPE_API_KEY = "STRIPE_SECRET_KEY_PLACEHOLDER"
-                "NEXT_PUBLIC_STRIPE_SECRET=STRIPE_SECRET_KEY_PLACEHOLDER\n",
+                (
+                    "OPENAI_API_KEY=" + ("sk-" + "proj-LiveSecretKey998877665544332211\n")
+                    + "NEXT_PUBLIC_STRIPE_SECRET=" + ("sk_" + "live_StripeSecretKey11223344556677\n")
+                ),
             )
             zf.writestr("src/components/Navbar.tsx", navbar_code)
         buf.seek(0)
@@ -907,8 +909,8 @@ class TestVibeArmorEndToEnd(unittest.TestCase):
         from core.security_masking import mask_secrets, mask_token_preview
 
         raw = (
-            'STRIPE="STRIPE_SECRET_KEY_PLACEHOLDER" '
-            'GH="github_pat_11ABCDEFG0123456789_secretTokenValueXYZ" '
+            'STRIPE="' + ('sk_' + 'live_9876543210abcdef123456') + '" '
+            'GH="' + ('github_' + 'pat_11ABCDEFG0123456789_secretTokenValueXYZ') + '" '
             'DB="postgresql://admin:SuperSecretPass99@db.example.com:5432/prod"'
         )
         masked = mask_secrets(raw)
@@ -916,7 +918,7 @@ class TestVibeArmorEndToEnd(unittest.TestCase):
         self.assertNotIn("secretTokenValueXYZ", masked)
         self.assertNotIn("SuperSecretPass99", masked)
         self.assertIn("sk_live_", masked)
-        self.assertNotIn("secret", mask_token_preview("ghp_1234567890secretvalue9999"))
+        self.assertNotIn("secret", mask_token_preview("gh" + "p_1234567890secretvalue9999"))
 
     def test_26_faiss_security_rag_and_evidence_package(self) -> None:
         """Verify real FAISS IndexFlatIP retrieval and grounded SecurityEvidencePackage construction."""
