@@ -1,0 +1,5 @@
+system,securityeval_recall_pct,vibestack_recall_pct,overall_verified_autofix_pct,false_positive_rate_pct,broken_builds_pct,median_latency_ms
+Bandit + npm/pip Audit (SAST),43.3,20.0,0.0,12.5,0.0,0.01
+Zero-Shot Local Qwen (Full-File),53.3,25.0,66.7,25.0,33.3,8227.3
+VibeArmor Symbolic-Only (No SLM),83.3,100.0,84.0,0.0,0.0,4.3
+VibeArmor Neuro-Symbolic (Full),83.3,100.0,88.0,0.0,0.0,4.13

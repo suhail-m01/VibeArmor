@@ -1,0 +1,8 @@
+security:
+  block_critical: true
+  block_high: true
+  block_medium: false
+  require_verification: true
+  require_tests: true
+  allow_unverified_ai_patch: false
+  secrets_block_commit: true

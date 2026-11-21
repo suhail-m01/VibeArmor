@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>VibeArmor AI Code &amp; Deploy Guard</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="header">
+      <div class="brand">
+        <div class="logo">🛡️</div>
+        <div>
+          <div class="title">VibeArmor <span class="ver">v3.5</span></div>
+          <div class="sub">Scan AI-Generated Code &amp; Gate Deploys</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <label class="lbl">1. Instant AI Snippet Scanner (Works Offline &amp; Paired)</label>
+      <textarea
+        id="snippetInput"
+        rows="4"
+        style="width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:8px;padding:6px 8px;font-family:monospace;font-size:11px;margin-bottom:6px;"
+        placeholder="Paste AI-generated code or click 'Grab Selection'..."
+      ></textarea>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <button id="grabBtn" class="btn-sec" type="button">Grab Selection</button>
+        <button id="scanSnippetBtn" class="btn-pri" type="button">Scan AI Snippet</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <label class="lbl">2. GitHub Repository Gate (Auto-Detected on GitHub)</label>
+      <input id="repoInput" type="text" placeholder="https://github.com/owner/repo" />
+      <button id="auditBtn" class="btn-pri" type="button" style="margin-top:7px;width:100%;">
+        Audit &amp; Verify Push / Deploy Gate
+      </button>
+    </div>
+
+    <div id="resultBox" class="section hidden"></div>
+
+    <div class="section">
+      <label class="lbl">Studio Server URL (Optional — Offline Engine Built-In)</label>
+      <div class="row">
+        <input id="serverUrl" type="text" placeholder="http://127.0.0.1:8000" />
+        <button id="saveCfgBtn" class="btn-sec" type="button">Save</button>
+      </div>
+      <input id="pairToken" type="text" placeholder="Pair token: va_pair_xxxx (optional)" style="margin-top:5px;" />
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

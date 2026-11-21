@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run VibeArmor Full-Stack (Backend :8000 + Vite UI :5173)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/studio/scripts/dev_fullstack.mjs",
+      "cwd": "${workspaceFolder}/studio",
+      "console": "integratedTerminal"
+    }
+  ]
+}

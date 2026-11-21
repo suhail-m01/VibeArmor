@@ -1,0 +1,13 @@
+{
+  "project_ref": "vibebazaar-india-blr-prod",
+  "captured_from": "pg_catalog.pg_tables + pg_catalog.pg_policies",
+  "pg_tables": [
+    {
+      "schemaname": "public",
+      "tablename": "aadhaar_kyc_verifications",
+      "rowsecurity": false,
+      "columns": ["id", "user_id", "aadhaar_last4", "phone", "kyc_status"]
+    }
+  ],
+  "pg_policies": []
+}

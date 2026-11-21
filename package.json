@@ -1,0 +1,11 @@
+{
+  "name": "vibearmor-fullstack",
+  "private": true,
+  "version": "3.6.0",
+  "description": "VibeArmor v3.6 Full-Stack Closed-Loop DevSecOps Studio & Multi-Editor Guard",
+  "scripts": {
+    "dev": "node -e \"const fs=require('fs'),cp=require('child_process');if(!fs.existsSync('studio/node_modules'))cp.execSync('npm --prefix studio install',{stdio:'inherit'});cp.spawnSync(process.execPath,['studio/scripts/dev_fullstack.mjs'],{stdio:'inherit'});\"",
+    "start": "npm run dev",
+    "build": "npm --prefix studio install && npm --prefix studio run build"
+  }
+}

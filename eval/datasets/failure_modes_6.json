@@ -1,0 +1,50 @@
+[
+  {
+    "id": "FM-01-MULTITENANT-REFUND-APPROVAL",
+    "boundary_type": "Multi-Tenant Custom Role & INR Threshold RLS",
+    "expected_abstention_code": "NEEDS_POLICY_SPEC",
+    "files": {
+      "supabase/migrations/01.sql": "-- POLICY_SPEC: Managers approve refunds <= 10000 INR; Directors approve > 10000 INR within same org_id\nCREATE TABLE public.refund_requests (\n    id UUID PRIMARY KEY,\n    org_id UUID NOT NULL,\n    required_role TEXT NOT NULL,\n    approval_limit_inr INT NOT NULL,\n    refund_amount_inr INT NOT NULL\n);"
+    }
+  },
+  {
+    "id": "FM-02-ORG-DEPARTMENT-LEDGER",
+    "boundary_type": "Multi-Tenant Hierarchical Org/Dept Matrix",
+    "expected_abstention_code": "NEEDS_POLICY_SPEC",
+    "files": {
+      "supabase/migrations/01.sql": "CREATE TABLE public.org_payout_ledger (\n    id UUID PRIMARY KEY,\n    tenant_id UUID NOT NULL,\n    department_id UUID NOT NULL,\n    min_approver_tier INT NOT NULL\n);"
+    }
+  },
+  {
+    "id": "FM-03-DYNAMIC-PLUGIN-GETATTR",
+    "boundary_type": "Dynamic Runtime Reflection Dispatch",
+    "expected_abstention_code": "NEEDS_ALLOWLIST_SPEC",
+    "files": {
+      "backend/plugin_router.py": "class PaymentPlugins:\n    def upi(self): return 'upi'\ndef dispatch_plugin(registry: PaymentPlugins, plugin_action: str):\n    fn = getattr(registry, plugin_action)\n    return fn()\n"
+    }
+  },
+  {
+    "id": "FM-04-WEBHOOK-REFLECTIVE-HANDLER",
+    "boundary_type": "Dynamic Runtime Reflection Dispatch",
+    "expected_abstention_code": "NEEDS_ALLOWLIST_SPEC",
+    "files": {
+      "backend/events.py": "def handle_webhook_event(controller: object, event_type: str, data: dict):\n    handler = getattr(controller, event_type)\n    return handler(data)\n"
+    }
+  },
+  {
+    "id": "FM-05-STATEFUL-COUPON-RACE",
+    "boundary_type": "Stateful Multi-Request TOCTOU Coupon Replay",
+    "expected_abstention_code": "NEEDS_BUSINESS_INVARIANT",
+    "files": {
+      "backend/promo.py": "# STATEFUL_LOGIC_FLOW: Single-use vs campaign-cap semantics require business invariant\ndef redeem_festival_coupon(coupon_code: str, used_count: int):\n    if coupon_code and used_count == 0:\n        return {'applied': True}\n    return {'applied': False}\n"
+    }
+  },
+  {
+    "id": "FM-06-WALLET-CONCURRENT-DEBIT",
+    "boundary_type": "Stateful Non-Atomic Wallet Balance Debit",
+    "expected_abstention_code": "NEEDS_BUSINESS_INVARIANT",
+    "files": {
+      "backend/wallet.py": "def debit_loyalty_coins(wallet_balance: int, debit_pts: int):\n    wallet_balance -= debit_pts\n    return {'remaining': wallet_balance}\n"
+    }
+  }
+]

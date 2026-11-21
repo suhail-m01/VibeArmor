@@ -1,0 +1,23 @@
+# Python bytecode & packaging
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Frontend dependencies & Vite scratch output (core/static_ui/ stays tracked for zero-Node boot)
+studio/node_modules/
+studio/dist/
+node_modules/
+
+# Runtime imported workspaces & local caches
+workspaces_store/
+.vibearmor/
+*.gguf
+
+# OS metadata
+.DS_Store
+Thumbs.db

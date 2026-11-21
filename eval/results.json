@@ -1,0 +1,1026 @@
+{
+  "benchmark_version": "1.0.0",
+  "hypothesis": "Deterministic cross-layer AST/SQL/registry Minimal Security Slicing (MSS) cuts prompt context by >80%, enabling a grammar-constrained local open-weight coder model (Qwen2.5-Coder)\u2014gated by compile and exploit-replay verification\u2014to auto-remediate >85% of full-stack vulnerabilities with 0 broken builds.",
+  "datasets": {
+    "securityeval_30_count": 30,
+    "vibestack_vulnerable_count": 20,
+    "vibestack_hard_negatives_count": 8,
+    "failure_modes_count": 6,
+    "total_evaluated_cases": 64
+  },
+  "comparison_table": [
+    {
+      "system": "Bandit + npm/pip Audit (SAST)",
+      "securityeval_recall_pct": 43.3,
+      "vibestack_recall_pct": 20.0,
+      "overall_verified_autofix_pct": 0.0,
+      "false_positive_rate_pct": 12.5,
+      "broken_builds_pct": 0.0,
+      "median_latency_ms": 166.7
+    },
+    {
+      "system": "Zero-Shot Local Qwen (Full-File)",
+      "securityeval_recall_pct": 53.3,
+      "vibestack_recall_pct": 25.0,
+      "overall_verified_autofix_pct": 66.7,
+      "false_positive_rate_pct": 25.0,
+      "broken_builds_pct": 33.3,
+      "median_latency_ms": 8227.3
+    },
+    {
+      "system": "VibeArmor Symbolic-Only (No SLM)",
+      "securityeval_recall_pct": 83.3,
+      "vibestack_recall_pct": 100.0,
+      "overall_verified_autofix_pct": 84.0,
+      "false_positive_rate_pct": 0.0,
+      "broken_builds_pct": 0.0,
+      "median_latency_ms": 4.3
+    },
+    {
+      "system": "VibeArmor Neuro-Symbolic (Full)",
+      "securityeval_recall_pct": 83.3,
+      "vibestack_recall_pct": 100.0,
+      "overall_verified_autofix_pct": 88.0,
+      "false_positive_rate_pct": 0.0,
+      "broken_builds_pct": 0.0,
+      "median_latency_ms": 4.13
+    }
+  ],
+  "securityeval_30": {
+    "bandit_sast": {
+      "vulnerable_total": 30,
+      "detected_count": 13,
+      "detection_recall_pct": 43.3,
+      "verified_healed_count": 0,
+      "verified_auto_fix_pct": 0.0,
+      "broken_builds": 0,
+      "hard_negatives_total": 0,
+      "false_positives": 0,
+      "false_positive_rate_pct": 0.0,
+      "median_scan_ms": 166.7,
+      "median_total_ms": 166.7
+    },
+    "vibearmor_symbolic": {
+      "vulnerable_total": 30,
+      "detected_count": 25,
+      "detection_recall_pct": 83.3,
+      "verified_healed_count": 23,
+      "verified_auto_fix_pct": 76.7,
+      "broken_builds": 0,
+      "hard_negatives_total": 0,
+      "false_positives": 0,
+      "false_positive_rate_pct": 0.0,
+      "median_scan_ms": 0.54,
+      "median_total_ms": 2.97,
+      "tasks": [
+        {
+          "id": "CWE-089_author_1",
+          "cwe": "CWE-089",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 1.08,
+          "total_ms": 6.17
+        },
+        {
+          "id": "CWE-089_codeql_1",
+          "cwe": "CWE-089",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.65,
+          "total_ms": 3.81
+        },
+        {
+          "id": "CWE-078_author_1",
+          "cwe": "CWE-078",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.43,
+          "total_ms": 2.76
+        },
+        {
+          "id": "CWE-078_codeql_1",
+          "cwe": "CWE-078",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.79,
+          "total_ms": 3.54
+        },
+        {
+          "id": "CWE-094_author_1",
+          "cwe": "CWE-094",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.54,
+          "total_ms": 2.98
+        },
+        {
+          "id": "CWE-094_codeql_1",
+          "cwe": "CWE-094",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.7,
+          "total_ms": 3.28
+        },
+        {
+          "id": "CWE-094_sonar_1",
+          "cwe": "CWE-094",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.49,
+          "total_ms": 2.9
+        },
+        {
+          "id": "CWE-502_codeql_1",
+          "cwe": "CWE-502",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.33,
+          "total_ms": 2.33
+        },
+        {
+          "id": "CWE-502_mitre_1",
+          "cwe": "CWE-502",
+          "detected": true,
+          "verified_healed": false,
+          "scan_ms": 0.73,
+          "total_ms": 3.4
+        },
+        {
+          "id": "CWE-502_sonar_1",
+          "cwe": "CWE-502",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.51,
+          "total_ms": 2.8
+        },
+        {
+          "id": "CWE-022_author_1",
+          "cwe": "CWE-022",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.49,
+          "total_ms": 3.01
+        },
+        {
+          "id": "CWE-022_author_2",
+          "cwe": "CWE-022",
+          "detected": false,
+          "verified_healed": false,
+          "scan_ms": 0.47,
+          "total_ms": 0.48
+        },
+        {
+          "id": "CWE-022_codeql_1",
+          "cwe": "CWE-022",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.55,
+          "total_ms": 3.26
+        },
+        {
+          "id": "CWE-022_codeql_2",
+          "cwe": "CWE-022",
+          "detected": false,
+          "verified_healed": false,
+          "scan_ms": 0.41,
+          "total_ms": 0.41
+        },
+        {
+          "id": "CWE-079_codeql_1",
+          "cwe": "CWE-079",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.69,
+          "total_ms": 3.69
+        },
+        {
+          "id": "CWE-079_codeql_2",
+          "cwe": "CWE-079",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.61,
+          "total_ms": 3.27
+        },
+        {
+          "id": "CWE-079_sonar_1",
+          "cwe": "CWE-079",
+          "detected": false,
+          "verified_healed": false,
+          "scan_ms": 0.69,
+          "total_ms": 0.7
+        },
+        {
+          "id": "CWE-327_codeql_1",
+          "cwe": "CWE-327",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.59,
+          "total_ms": 2.97
+        },
+        {
+          "id": "CWE-327_codeql_2",
+          "cwe": "CWE-327",
+          "detected": false,
+          "verified_healed": false,
+          "scan_ms": 0.57,
+          "total_ms": 0.57
+        },
+        {
+          "id": "CWE-327_codeql_3",
+          "cwe": "CWE-327",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.43,
+          "total_ms": 2.32
+        },
+        {
+          "id": "CWE-327_codeql_4",
+          "cwe": "CWE-327",
+          "detected": false,
+          "verified_healed": false,
+          "scan_ms": 0.37,
+          "total_ms": 0.37
+        },
+        {
+          "id": "CWE-347_sonar_1",
+          "cwe": "CWE-347",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.3,
+          "total_ms": 1.85
+        },
+        {
+          "id": "CWE-347_sonar_2",
+          "cwe": "CWE-347",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.39,
+          "total_ms": 2.04
+        },
+        {
+          "id": "CWE-347_sonar_3",
+          "cwe": "CWE-347",
+          "detected": true,
+          "verified_healed": false,
+          "scan_ms": 0.3,
+          "total_ms": 0.88
+        },
+        {
+          "id": "CWE-601_sonar_1",
+          "cwe": "CWE-601",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.51,
+          "total_ms": 2.77
+        },
+        {
+          "id": "CWE-601_sonar_2",
+          "cwe": "CWE-601",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.51,
+          "total_ms": 2.96
+        },
+        {
+          "id": "CWE-611_author_1",
+          "cwe": "CWE-611",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.85,
+          "total_ms": 4.44
+        },
+        {
+          "id": "CWE-611_codeql_1",
+          "cwe": "CWE-611",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.55,
+          "total_ms": 3.18
+        },
+        {
+          "id": "CWE-611_sonar_1",
+          "cwe": "CWE-611",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.54,
+          "total_ms": 4.51
+        },
+        {
+          "id": "CWE-611_sonar_2",
+          "cwe": "CWE-611",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.58,
+          "total_ms": 4.83
+        }
+      ]
+    },
+    "vibearmor_neuro_symbolic": {
+      "vulnerable_total": 30,
+      "detected_count": 25,
+      "detection_recall_pct": 83.3,
+      "verified_healed_count": 24,
+      "verified_auto_fix_pct": 80.0,
+      "broken_builds": 0,
+      "hard_negatives_total": 0,
+      "false_positives": 0,
+      "false_positive_rate_pct": 0.0,
+      "median_scan_ms": 0.57,
+      "median_total_ms": 3.06,
+      "tasks": [
+        {
+          "id": "CWE-089_author_1",
+          "cwe": "CWE-089",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.69,
+          "total_ms": 3.53
+        },
+        {
+          "id": "CWE-089_codeql_1",
+          "cwe": "CWE-089",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.61,
+          "total_ms": 3.7
+        },
+        {
+          "id": "CWE-078_author_1",
+          "cwe": "CWE-078",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.52,
+          "total_ms": 2.64
+        },
+        {
+          "id": "CWE-078_codeql_1",
+          "cwe": "CWE-078",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.57,
+          "total_ms": 3.37
+        },
+        {
+          "id": "CWE-094_author_1",
+          "cwe": "CWE-094",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.54,
+          "total_ms": 2.72
+        },
+        {
+          "id": "CWE-094_codeql_1",
+          "cwe": "CWE-094",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.7,
+          "total_ms": 3.3
+        },
+        {
+          "id": "CWE-094_sonar_1",
+          "cwe": "CWE-094",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.5,
+          "total_ms": 2.98
+        },
+        {
+          "id": "CWE-502_codeql_1",
+          "cwe": "CWE-502",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.39,
+          "total_ms": 2.18
+        },
+        {
+          "id": "CWE-502_mitre_1",
+          "cwe": "CWE-502",
+          "detected": true,
+          "verified_healed": false,
+          "scan_ms": 0.8,
+          "total_ms": 3.62
+        },
+        {
+          "id": "CWE-502_sonar_1",
+          "cwe": "CWE-502",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.67,
+          "total_ms": 3.06
+        },
+        {
+          "id": "CWE-022_author_1",
+          "cwe": "CWE-022",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.72,
+          "total_ms": 3.15
+        },
+        {
+          "id": "CWE-022_author_2",
+          "cwe": "CWE-022",
+          "detected": false,
+          "verified_healed": false,
+          "scan_ms": 0.44,
+          "total_ms": 0.44
+        },
+        {
+          "id": "CWE-022_codeql_1",
+          "cwe": "CWE-022",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.82,
+          "total_ms": 3.49
+        },
+        {
+          "id": "CWE-022_codeql_2",
+          "cwe": "CWE-022",
+          "detected": false,
+          "verified_healed": false,
+          "scan_ms": 0.39,
+          "total_ms": 0.39
+        },
+        {
+          "id": "CWE-079_codeql_1",
+          "cwe": "CWE-079",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.67,
+          "total_ms": 3.91
+        },
+        {
+          "id": "CWE-079_codeql_2",
+          "cwe": "CWE-079",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.59,
+          "total_ms": 3.49
+        },
+        {
+          "id": "CWE-079_sonar_1",
+          "cwe": "CWE-079",
+          "detected": false,
+          "verified_healed": false,
+          "scan_ms": 0.73,
+          "total_ms": 0.74
+        },
+        {
+          "id": "CWE-327_codeql_1",
+          "cwe": "CWE-327",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.53,
+          "total_ms": 2.6
+        },
+        {
+          "id": "CWE-327_codeql_2",
+          "cwe": "CWE-327",
+          "detected": false,
+          "verified_healed": false,
+          "scan_ms": 0.63,
+          "total_ms": 0.63
+        },
+        {
+          "id": "CWE-327_codeql_3",
+          "cwe": "CWE-327",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.4,
+          "total_ms": 2.3
+        },
+        {
+          "id": "CWE-327_codeql_4",
+          "cwe": "CWE-327",
+          "detected": false,
+          "verified_healed": false,
+          "scan_ms": 0.37,
+          "total_ms": 0.37
+        },
+        {
+          "id": "CWE-347_sonar_1",
+          "cwe": "CWE-347",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.32,
+          "total_ms": 2.14
+        },
+        {
+          "id": "CWE-347_sonar_2",
+          "cwe": "CWE-347",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.4,
+          "total_ms": 2.02
+        },
+        {
+          "id": "CWE-347_sonar_3",
+          "cwe": "CWE-347",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.37,
+          "total_ms": 4606.01
+        },
+        {
+          "id": "CWE-601_sonar_1",
+          "cwe": "CWE-601",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.48,
+          "total_ms": 2.74
+        },
+        {
+          "id": "CWE-601_sonar_2",
+          "cwe": "CWE-601",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.48,
+          "total_ms": 2.95
+        },
+        {
+          "id": "CWE-611_author_1",
+          "cwe": "CWE-611",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.87,
+          "total_ms": 4.49
+        },
+        {
+          "id": "CWE-611_codeql_1",
+          "cwe": "CWE-611",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.57,
+          "total_ms": 3.11
+        },
+        {
+          "id": "CWE-611_sonar_1",
+          "cwe": "CWE-611",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.54,
+          "total_ms": 4.94
+        },
+        {
+          "id": "CWE-611_sonar_2",
+          "cwe": "CWE-611",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.8,
+          "total_ms": 7.39
+        }
+      ]
+    }
+  },
+  "vibestack_28": {
+    "bandit_sast": {
+      "vulnerable_total": 20,
+      "detected_count": 4,
+      "detection_recall_pct": 20.0,
+      "verified_healed_count": 0,
+      "verified_auto_fix_pct": 0.0,
+      "broken_builds": 0,
+      "hard_negatives_total": 8,
+      "false_positives": 1,
+      "false_positive_rate_pct": 12.5,
+      "median_scan_ms": 0.01,
+      "median_total_ms": 0.01
+    },
+    "vibearmor_symbolic": {
+      "vulnerable_total": 20,
+      "detected_count": 20,
+      "detection_recall_pct": 100.0,
+      "verified_healed_count": 19,
+      "verified_auto_fix_pct": 95.0,
+      "broken_builds": 0,
+      "hard_negatives_total": 8,
+      "false_positives": 0,
+      "false_positive_rate_pct": 0.0,
+      "median_scan_ms": 0.67,
+      "median_total_ms": 4.3,
+      "tasks": [
+        {
+          "id": "VS-01-RLS-MISSING-USERS",
+          "cwe": "CWE-284",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 3.89,
+          "total_ms": 10.96
+        },
+        {
+          "id": "VS-02-RLS-MISSING-INVOICES",
+          "cwe": "CWE-284",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 1.77,
+          "total_ms": 7.66
+        },
+        {
+          "id": "VS-03-RLS-FK-CHILD-JOIN",
+          "cwe": "CWE-284",
+          "detected": true,
+          "verified_healed": false,
+          "scan_ms": 2.33,
+          "total_ms": 6.16
+        },
+        {
+          "id": "VS-04-RLS-VACUOUS-TRUE-ALL",
+          "cwe": "CWE-732",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 1.4,
+          "total_ms": 7.1
+        },
+        {
+          "id": "VS-05-RLS-VACUOUS-INSERT",
+          "cwe": "CWE-732",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 1.36,
+          "total_ms": 7.74
+        },
+        {
+          "id": "VS-06-CLOUD-DRIFT-TABLE",
+          "cwe": "CWE-284",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.28,
+          "total_ms": 2.75
+        },
+        {
+          "id": "VS-07-SECURITY-DEFINER-RPC",
+          "cwe": "CWE-269",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 1.06,
+          "total_ms": 4.3
+        },
+        {
+          "id": "VS-08-CLIENT-OPENAI-KEY",
+          "cwe": "CWE-798",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.86,
+          "total_ms": 8.67
+        },
+        {
+          "id": "VS-09-CLIENT-ANTHROPIC-KEY",
+          "cwe": "CWE-798",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.39,
+          "total_ms": 7.74
+        },
+        {
+          "id": "VS-10-CLIENT-SERVICE-ROLE-JWT",
+          "cwe": "CWE-798",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.35,
+          "total_ms": 7.26
+        },
+        {
+          "id": "VS-11-RAZORPAY-SECRET-SERVER",
+          "cwe": "CWE-798",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.54,
+          "total_ms": 3.34
+        },
+        {
+          "id": "VS-12-RAZORPAY-ZERO-RUPEE-SPOOF",
+          "cwe": "CWE-345",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.91,
+          "total_ms": 7.1
+        },
+        {
+          "id": "VS-13-UNAUTH-DELETE-API",
+          "cwe": "CWE-306",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.5,
+          "total_ms": 3.78
+        },
+        {
+          "id": "VS-14-PY-SQLI-FSTRING",
+          "cwe": "CWE-089",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.62,
+          "total_ms": 3.33
+        },
+        {
+          "id": "VS-15-TS-SQLI-TEMPLATE",
+          "cwe": "CWE-089",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.73,
+          "total_ms": 3.09
+        },
+        {
+          "id": "VS-16-PY-CMD-SHELL",
+          "cwe": "CWE-078",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.45,
+          "total_ms": 2.4
+        },
+        {
+          "id": "VS-17-PY-YAML-UNSAFE",
+          "cwe": "CWE-502",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.34,
+          "total_ms": 2.0
+        },
+        {
+          "id": "VS-18-NPM-SLOPSQUAT-HALLUCINATION",
+          "cwe": "CWE-829",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.31,
+          "total_ms": 1.38
+        },
+        {
+          "id": "VS-19-NPM-TYPOSQUAT",
+          "cwe": "CWE-829",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.19,
+          "total_ms": 1.33
+        },
+        {
+          "id": "VS-20-REACHABLE-CVE-PYJWT",
+          "cwe": "CWE-1395",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.67,
+          "total_ms": 2.84
+        }
+      ]
+    },
+    "vibearmor_neuro_symbolic": {
+      "vulnerable_total": 20,
+      "detected_count": 20,
+      "detection_recall_pct": 100.0,
+      "verified_healed_count": 20,
+      "verified_auto_fix_pct": 100.0,
+      "broken_builds": 0,
+      "hard_negatives_total": 8,
+      "false_positives": 0,
+      "false_positive_rate_pct": 0.0,
+      "median_scan_ms": 0.55,
+      "median_total_ms": 4.13,
+      "tasks": [
+        {
+          "id": "VS-01-RLS-MISSING-USERS",
+          "cwe": "CWE-284",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 1.97,
+          "total_ms": 8.07
+        },
+        {
+          "id": "VS-02-RLS-MISSING-INVOICES",
+          "cwe": "CWE-284",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 1.43,
+          "total_ms": 7.92
+        },
+        {
+          "id": "VS-03-RLS-FK-CHILD-JOIN",
+          "cwe": "CWE-284",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 2.62,
+          "total_ms": 5632.08
+        },
+        {
+          "id": "VS-04-RLS-VACUOUS-TRUE-ALL",
+          "cwe": "CWE-732",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 1.53,
+          "total_ms": 7.41
+        },
+        {
+          "id": "VS-05-RLS-VACUOUS-INSERT",
+          "cwe": "CWE-732",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 1.18,
+          "total_ms": 7.18
+        },
+        {
+          "id": "VS-06-CLOUD-DRIFT-TABLE",
+          "cwe": "CWE-284",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.32,
+          "total_ms": 2.96
+        },
+        {
+          "id": "VS-07-SECURITY-DEFINER-RPC",
+          "cwe": "CWE-269",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.58,
+          "total_ms": 3.96
+        },
+        {
+          "id": "VS-08-CLIENT-OPENAI-KEY",
+          "cwe": "CWE-798",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.59,
+          "total_ms": 8.04
+        },
+        {
+          "id": "VS-09-CLIENT-ANTHROPIC-KEY",
+          "cwe": "CWE-798",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.49,
+          "total_ms": 7.82
+        },
+        {
+          "id": "VS-10-CLIENT-SERVICE-ROLE-JWT",
+          "cwe": "CWE-798",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.37,
+          "total_ms": 7.04
+        },
+        {
+          "id": "VS-11-RAZORPAY-SECRET-SERVER",
+          "cwe": "CWE-798",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.41,
+          "total_ms": 2.4
+        },
+        {
+          "id": "VS-12-RAZORPAY-ZERO-RUPEE-SPOOF",
+          "cwe": "CWE-345",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.85,
+          "total_ms": 7.26
+        },
+        {
+          "id": "VS-13-UNAUTH-DELETE-API",
+          "cwe": "CWE-306",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.52,
+          "total_ms": 4.13
+        },
+        {
+          "id": "VS-14-PY-SQLI-FSTRING",
+          "cwe": "CWE-089",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.53,
+          "total_ms": 3.26
+        },
+        {
+          "id": "VS-15-TS-SQLI-TEMPLATE",
+          "cwe": "CWE-089",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.57,
+          "total_ms": 2.71
+        },
+        {
+          "id": "VS-16-PY-CMD-SHELL",
+          "cwe": "CWE-078",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.41,
+          "total_ms": 2.54
+        },
+        {
+          "id": "VS-17-PY-YAML-UNSAFE",
+          "cwe": "CWE-502",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.38,
+          "total_ms": 2.13
+        },
+        {
+          "id": "VS-18-NPM-SLOPSQUAT-HALLUCINATION",
+          "cwe": "CWE-829",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.21,
+          "total_ms": 1.33
+        },
+        {
+          "id": "VS-19-NPM-TYPOSQUAT",
+          "cwe": "CWE-829",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.23,
+          "total_ms": 1.32
+        },
+        {
+          "id": "VS-20-REACHABLE-CVE-PYJWT",
+          "cwe": "CWE-1395",
+          "detected": true,
+          "verified_healed": true,
+          "scan_ms": 0.52,
+          "total_ms": 2.68
+        }
+      ]
+    }
+  },
+  "zeroshot_full_file_slm": {
+    "evaluated_sample_size": 6,
+    "verified_auto_fix_pct": 66.7,
+    "broken_build_regression_pct": 33.3,
+    "median_total_ms": 8227.3,
+    "note": "Evaluated live on local Qwen2.5-Coder GGUF with realistic 100+ line module context and no symbolic slicing or 3-gate rollback."
+  },
+  "context_scaling_ablation": [
+    {
+      "file_lines": 59,
+      "full_file_tokens": 443,
+      "mss_slice_lines": 7,
+      "mss_slice_tokens": 56,
+      "token_reduction_pct": 87.4
+    },
+    {
+      "file_lines": 147,
+      "full_file_tokens": 1103,
+      "mss_slice_lines": 7,
+      "mss_slice_tokens": 56,
+      "token_reduction_pct": 94.9
+    },
+    {
+      "file_lines": 299,
+      "full_file_tokens": 2243,
+      "mss_slice_lines": 7,
+      "mss_slice_tokens": 56,
+      "token_reduction_pct": 97.5
+    },
+    {
+      "file_lines": 499,
+      "full_file_tokens": 3749,
+      "mss_slice_lines": 7,
+      "mss_slice_tokens": 56,
+      "token_reduction_pct": 98.5
+    }
+  ],
+  "failure_modes_6": {
+    "total_boundary_cases": 6,
+    "safe_abstentions": 6,
+    "safe_abstention_rate_pct": 100.0,
+    "unsafe_hallucinated_patches": 0,
+    "cases": [
+      {
+        "id": "FM-01-MULTITENANT-REFUND-APPROVAL",
+        "boundary_type": "Multi-Tenant Custom Role & INR Threshold RLS",
+        "expected": "NEEDS_POLICY_SPEC",
+        "abstained_safely": true,
+        "reason": "NEEDS_POLICY_SPEC: Custom multi-tenant role & INR approval hierarchy cannot be synthesized purely from AST/DDL without an explicit policy specification."
+      },
+      {
+        "id": "FM-02-ORG-DEPARTMENT-LEDGER",
+        "boundary_type": "Multi-Tenant Hierarchical Org/Dept Matrix",
+        "expected": "NEEDS_POLICY_SPEC",
+        "abstained_safely": true,
+        "reason": "NEEDS_POLICY_SPEC: Custom multi-tenant role & INR approval hierarchy cannot be synthesized purely from AST/DDL without an explicit policy specification."
+      },
+      {
+        "id": "FM-03-DYNAMIC-PLUGIN-GETATTR",
+        "boundary_type": "Dynamic Runtime Reflection Dispatch",
+        "expected": "NEEDS_ALLOWLIST_SPEC",
+        "abstained_safely": true,
+        "reason": "NEEDS_ALLOWLIST_SPEC: Dynamic `getattr` reflection hides target call graph from static AST verification; auto-rewriting risks breaking legitimate plugin/command dispatch."
+      },
+      {
+        "id": "FM-04-WEBHOOK-REFLECTIVE-HANDLER",
+        "boundary_type": "Dynamic Runtime Reflection Dispatch",
+        "expected": "NEEDS_ALLOWLIST_SPEC",
+        "abstained_safely": true,
+        "reason": "NEEDS_ALLOWLIST_SPEC: Dynamic `getattr` reflection hides target call graph from static AST verification; auto-rewriting risks breaking legitimate plugin/command dispatch."
+      },
+      {
+        "id": "FM-05-STATEFUL-COUPON-RACE",
+        "boundary_type": "Stateful Multi-Request TOCTOU Coupon Replay",
+        "expected": "NEEDS_BUSINESS_INVARIANT",
+        "abstained_safely": true,
+        "reason": "NEEDS_BUSINESS_INVARIANT: Multi-request TOCTOU coupon/wallet semantics depend on application business rules (per-user vs global cap, retry idempotency) uninferable from syntax alone."
+      },
+      {
+        "id": "FM-06-WALLET-CONCURRENT-DEBIT",
+        "boundary_type": "Stateful Non-Atomic Wallet Balance Debit",
+        "expected": "NEEDS_BUSINESS_INVARIANT",
+        "abstained_safely": true,
+        "reason": "NEEDS_BUSINESS_INVARIANT: Multi-request TOCTOU coupon/wallet semantics depend on application business rules (per-user vs global cap, retry idempotency) uninferable from syntax alone."
+      }
+    ]
+  }
+}

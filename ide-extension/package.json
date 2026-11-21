@@ -1,0 +1,113 @@
+{
+  "name": "vibearmor-ide-guard",
+  "displayName": "VibeArmor — Pre-Push & Deploy Security Gate",
+  "description": "Two-way live sync + standalone security audit, auto Git init/remote setup & verified safe GitHub push gate for VS Code, Cursor & Windsurf.",
+  "version": "3.6.0",
+  "publisher": "nexgen-coders",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters",
+    "Security",
+    "SCM Providers",
+    "Testing"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./bundle/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "vibearmor-sidebar",
+          "title": "VibeArmor Push & Deploy Gate",
+          "icon": "media/shield.svg"
+        }
+      ]
+    },
+    "views": {
+      "vibearmor-sidebar": [
+        {
+          "type": "webview",
+          "id": "vibearmor.readinessPanel",
+          "name": "Push & Deploy Gate"
+        }
+      ]
+    },
+    "menus": {
+      "scm/title": [
+        {
+          "command": "vibearmor.safePushToGitHub",
+          "group": "navigation"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "vibearmor.verifyReadiness",
+        "title": "VibeArmor: Verify Ready for GitHub Push & Deploy"
+      },
+      {
+        "command": "vibearmor.pairWorkspace",
+        "title": "VibeArmor: Pair Editor Folder with Web Studio (Two-Way Sync)"
+      },
+      {
+        "command": "vibearmor.reviewSurgicalFixes",
+        "title": "VibeArmor: Compare Vulnerable vs. Correct Code & Adopt Fixes"
+      },
+      {
+        "command": "vibearmor.safePushToGitHub",
+        "title": "VibeArmor: 1-Click Verified Safe Push to GitHub"
+      },
+      {
+        "command": "vibearmor.installPushHook",
+        "title": "VibeArmor: Install Hard Git Pre-Push & Pre-Commit Gate"
+      },
+      {
+        "command": "vibearmor.openInWebStudio",
+        "title": "VibeArmor: Open Paired Graph & Diff in Web Studio"
+      },
+      {
+        "command": "vibearmor.connectServer",
+        "title": "VibeArmor: Configure Application Server URL"
+      },
+      {
+        "command": "vibearmor.configureGitRemote",
+        "title": "VibeArmor: Configure Target GitHub Repository URL (origin)"
+      }
+    ],
+    "configuration": {
+      "title": "VibeArmor",
+      "properties": {
+        "vibearmor.serverUrl": {
+          "type": "string",
+          "default": "http://127.0.0.1:8000",
+          "description": "URL of your running VibeArmor Web Application server."
+        },
+        "vibearmor.githubRepoUrl": {
+          "type": "string",
+          "default": "",
+          "description": "Target GitHub repository URL (https://github.com/owner/repo) for 1-Click Safe Push."
+        },
+        "vibearmor.pairToken": {
+          "type": "string",
+          "default": "",
+          "description": "Two-way workspace pairing token (va_pair_...) generated in VibeArmor Web Studio."
+        },
+        "vibearmor.autoSyncOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically sync workspace files to paired VibeArmor Web Studio on file save."
+        },
+        "vibearmor.blockGitPushOnCritical": {
+          "type": "boolean",
+          "default": true,
+          "description": "Hard-block git push whenever open security vulnerabilities exist."
+        }
+      }
+    }
+  }
+}

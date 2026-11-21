@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "VibeArmor — AI Code & Deploy Security Guard",
+  "version": "3.0.0",
+  "description": "Scan AI-generated code directly from supported AI coding environments and gate unsafe GitHub merges & cloud deployments with evidence-driven checks.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1/*",
+    "http://localhost/*",
+    "https://*.e2b.app/*",
+    "https://*.arena.site/*",
+    "https://github.com/*",
+    "https://vercel.com/*",
+    "https://app.netlify.com/*",
+    "https://dashboard.render.com/*",
+    "https://railway.app/*",
+    "https://lovable.dev/*",
+    "https://bolt.new/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "VibeArmor AI Code & Deploy Guard",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://github.com/*",
+        "https://vercel.com/*",
+        "https://app.netlify.com/*",
+        "https://dashboard.render.com/*",
+        "https://railway.app/*",
+        "https://lovable.dev/*",
+        "https://bolt.new/*"
+      ],
+      "css": ["content_guard.css"],
+      "js": ["content_guard.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
