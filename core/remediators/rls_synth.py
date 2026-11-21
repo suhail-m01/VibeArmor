@@ -198,8 +198,8 @@ def synthesize_rls_fix(finding: Finding, ctx: WorkspaceContext, slm_sql_override
                 created_new=not bool(before_mig),
             )
         )
-        drift_rel = finding.file_path
-        before_cat = ctx.file_contents.get(drift_rel, "")
+        drift_rel = finding.file_path.replace("\\", "/")
+        before_cat = ctx.file_contents.get(drift_rel, "") or ctx.file_contents.get(drift_rel.replace("/", "\\"), "")
         if before_cat:
             try:
                 cat_data = json.loads(before_cat)

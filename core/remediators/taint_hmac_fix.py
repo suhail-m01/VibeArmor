@@ -117,9 +117,16 @@ def sanitize_taint_or_payment(
                 r'\1"\2 ?", (\3,))',
                 after,
             )
+            def _repl_percent(m: re.Match[str]) -> str:
+                grp_prefix = m.group(1)
+                sql_part = m.group(2) if m.group(2) is not None else m.group(3)
+                sql_clean = re.sub(r"""['"]?%s['"]?""", "?", sql_part)
+                param_part = m.group(4).strip().rstrip(",")
+                return f'{grp_prefix}"{sql_clean}", ({param_part},))'
+
             after = re.sub(
                 r"(\.execute\s*\(\s*)(?:\"([^\"]*?)\"|'([^']*?)')\s*%\s*\(?([A-Za-z_][A-Za-z0-9_.,\s]*)\)?\s*\)",
-                lambda m: f'{m.group(1)}"{re.sub(r"[\'\"]?%s[\'\"]?", "?", (m.group(2) if m.group(2) is not None else m.group(3)))}", ({m.group(4).strip().rstrip(",")},))',
+                _repl_percent,
                 after,
             )
         else:

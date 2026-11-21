@@ -38,7 +38,7 @@ def inspect_cloud_drift(workspace: Path, local_sql: SqlSchemaAnalysis) -> List[C
         return []
 
     drifts: List[CloudDriftRecord] = []
-    rel_src = str(catalog_path.relative_to(workspace))
+    rel_src = str(catalog_path.relative_to(workspace)).replace("\\", "/")
 
     for tbl in raw.get("pg_tables", []):
         tname = str(tbl.get("tablename", "")).lower().strip()
